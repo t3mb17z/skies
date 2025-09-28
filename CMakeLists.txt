@@ -1,19 +1,28 @@
 cmake_minimum_required(VERSION 3.10)
+project(Skyline C)
 
-set(PROJECT skyline)
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(${PROJECT} VERSION 1.0)
+# Incluir headers
+include_directories(include)
 
-set(SRCDIR src)
-set(INCDIRS include)
-set(SOURCES
-  ${SRCDIR}/main.c
-  ${SRCDIR}/engine/physics.c
-  ${SRCDIR}/engine/time.c
+# Archivos fuente
+file(GLOB SOURCES
+    src/main.c
+    src/engine/collision.c
+    src/engine/physics.c
+    src/engine/time.c
 )
 
-include_directories(${INCDIRS})
-link_libraries(SDL2 m)
+add_executable(skyline ${SOURCES})
 
-add_executable(${PROJECT} ${SOURCES})
+# Buscar SDL2
+find_package(SDL2 REQUIRED)
+if (SDL2_FOUND)
+    include_directories(${SDL2_INCLUDE_DIRS})
+    target_link_libraries(skyline mingw32 SDL2main ${SDL2_LIBRARIES})
+else()
+    message(FATAL_ERROR "SDL2 not found!")
+endif()
+
