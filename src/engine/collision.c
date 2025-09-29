@@ -10,7 +10,7 @@ int Sky_AABB(SDL_Rect a, SDL_Rect b) {
 }
 
 Sky_CollisionType Sky_Collision(SDL_Rect player, SDL_Rect object) {
-  if(!Sky_Collision(player, object)) return SKY_COLLISION_NONE;
+  if(!Sky_AABB(player, object)) return SKY_COLLISION_NONE;
   int fromLeft = (player.x + player.w) - object.x;
   int fromRight = (object.x + object.w) - player.x;
   int fromTop = (player.y + player.h) - object.y;

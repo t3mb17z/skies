@@ -54,17 +54,6 @@ int main(int argc, char **argv) {
       }
     }
 
-    Sky_PhysicsApplyGravity(&playerPos, &playerVel, 9.81f, deltaTime);
-
-    type = Sky_Collision(player, floorRect);
-    if(type == SKY_COLLISION_TOP) {
-      playerPos.y = floorRect.y - player.h;
-      playerVel.y = 0;
-      isJumping = 0, isOsGround = 1;
-    } else if(type == SKY_COLLISION_NONE) {
-      
-    }
-
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     if(keys[SDL_SCANCODE_A]) playerPos.x -= playerPos.x >= 0 ? playerVel.x * deltaTime : 0;
     if(keys[SDL_SCANCODE_D]) playerPos.x += playerPos.x <= WIDTH - player.h ? playerVel.x * deltaTime : 0;
@@ -76,8 +65,19 @@ int main(int argc, char **argv) {
       jumped = 0;
     }
 
+    Sky_PhysicsApplyGravity(&playerPos, &playerVel, 9.81f, deltaTime);
+
     player.x = (int)round(playerPos.x);
     player.y = (int)round(playerPos.y);
+
+    type = Sky_Collision(player, floorRect);
+    if(type == SKY_COLLISION_TOP) {
+      playerPos.y = floorRect.y - player.h;
+      playerVel.y = 0;
+      isJumping = 0, isOsGround = 1;
+    } else if(type == SKY_COLLISION_NONE) {
+      
+    }
 
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
     SDL_RenderClear(render);
